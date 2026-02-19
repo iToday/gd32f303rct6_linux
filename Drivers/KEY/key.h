@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* °´¼üÊäÈë Çı¶¯´úÂë	   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* æŒ‰é”®è¾“å…¥ é©±åŠ¨ä»£ç 	   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef _KEY_H
@@ -9,15 +9,15 @@
 #include "sys.h"
 
 
-#define KEY0        gpio_input_bit_get(GPIOA,GPIO_PIN_13)  //¶ÁÈ¡KEY0Òı½Å
-#define KEY1        gpio_input_bit_get(GPIOA,GPIO_PIN_15)  //¶ÁÈ¡KEY1Òı½Å
-#define WK_UP       gpio_input_bit_get(GPIOA,GPIO_PIN_0)   //¶ÁÈ¡WKUPÒı½Å
+#define KEY0        gpio_input_bit_get(GPIOA,GPIO_PIN_13)  //è¯»å–KEY0å¼•è„š
+#define KEY1        gpio_input_bit_get(GPIOA,GPIO_PIN_15)  //è¯»å–KEY1å¼•è„š
+#define WK_UP       gpio_input_bit_get(GPIOA,GPIO_PIN_0)   //è¯»å–WKUPå¼•è„š
 
 
-#define KEY0_PRES 	1             //KEY0°´ÏÂ
-#define KEY1_PRES	  2             //KEY1°´ÏÂ
-#define WKUP_PRES   3             //KEY_UP°´ÏÂ(¼´WK_UP)
+#define KEY0_PRES 	1             //KEY0æŒ‰ä¸‹
+#define KEY1_PRES	  2             //KEY1æŒ‰ä¸‹
+#define WKUP_PRES   3             //KEY_UPæŒ‰ä¸‹(å³WK_UP)
 
-void KEY_Init(void);              //°´¼ü³õÊ¼»¯º¯Êı
-uint8_t KEY_Scan(uint8_t mode);   //°´¼üÉ¨Ãèº¯Êı
+void KEY_Init(void);              //æŒ‰é”®åˆå§‹åŒ–å‡½æ•°
+uint8_t KEY_Scan(uint8_t mode);   //æŒ‰é”®æ‰«æå‡½æ•°
 #endif

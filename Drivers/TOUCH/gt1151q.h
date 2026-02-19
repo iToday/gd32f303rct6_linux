@@ -1,40 +1,40 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* µçÈİ´¥ÃşÆÁ-GT1151 Çı¶¯´úÂë		   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* ç”µå®¹è§¦æ‘¸å±-GT1151 é©±åŠ¨ä»£ç 		   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef __GT1151Q_H
 #define __GT1151Q_H	
 #include "sys.h"	
 
-//ÓëµçÈİ´¥ÃşÆÁÁ¬½ÓµÄĞ¾Æ¬Òı½Å(Î´°üº¬IICÒı½Å) 
-//IO²Ù×÷º¯Êı	 
-#define GT_RST(x)    		gpio_pin_set(GPIOC, GPIO_PIN_13, x)	    //GT1151¸´Î»Òı½Å
-#define GT_INT    		  gpio_input_bit_get(GPIOC,GPIO_PIN_1)		//GT1151ÖĞ¶ÏÒı½Å	
+//ä¸ç”µå®¹è§¦æ‘¸å±è¿æ¥çš„èŠ¯ç‰‡å¼•è„š(æœªåŒ…å«IICå¼•è„š) 
+//IOæ“ä½œå‡½æ•°	 
+#define GT_RST(x)    		gpio_pin_set(GPIOC, GPIO_PIN_13, x)	    //GT1151å¤ä½å¼•è„š
+#define GT_INT    		  gpio_input_bit_get(GPIOC,GPIO_PIN_1)		//GT1151ä¸­æ–­å¼•è„š	
    	
  
-//IIC¶ÁĞ´ÃüÁî	
-#define GT_CMD_WR 		0X28     	//Ğ´ÃüÁî
-#define GT_CMD_RD 		0X29		  //¶ÁÃüÁî
+//IICè¯»å†™å‘½ä»¤	
+#define GT_CMD_WR 		0X28     	//å†™å‘½ä»¤
+#define GT_CMD_RD 		0X29		  //è¯»å‘½ä»¤
   
-//GT1151 ²¿·Ö¼Ä´æÆ÷¶¨Òå 
-#define GT_CTRL_REG 	0X8040   	//GT1151¿ØÖÆ¼Ä´æÆ÷
-#define GT_PID_REG 		0X8140   	//GT1151²úÆ·ID¼Ä´æÆ÷
+//GT1151 éƒ¨åˆ†å¯„å­˜å™¨å®šä¹‰ 
+#define GT_CTRL_REG 	0X8040   	//GT1151æ§åˆ¶å¯„å­˜å™¨
+#define GT_PID_REG 		0X8140   	//GT1151äº§å“IDå¯„å­˜å™¨
 
-#define GT_GSTID_REG 	0X814E   	//GT1151µ±Ç°¼ì²âµ½µÄ´¥ÃşÇé¿ö
-#define GT_TP1_REG 		0X8150  	//µÚÒ»¸ö´¥ÃşµãÊı¾İµØÖ·
-#define GT_TP2_REG 		0X8158		//µÚ¶ş¸ö´¥ÃşµãÊı¾İµØÖ·
-#define GT_TP3_REG 		0X8160		//µÚÈı¸ö´¥ÃşµãÊı¾İµØÖ·
-#define GT_TP4_REG 		0X8168		//µÚËÄ¸ö´¥ÃşµãÊı¾İµØÖ·
-#define GT_TP5_REG 		0X8170		//µÚÎå¸ö´¥ÃşµãÊı¾İµØÖ·  
+#define GT_GSTID_REG 	0X814E   	//GT1151å½“å‰æ£€æµ‹åˆ°çš„è§¦æ‘¸æƒ…å†µ
+#define GT_TP1_REG 		0X8150  	//ç¬¬ä¸€ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define GT_TP2_REG 		0X8158		//ç¬¬äºŒä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define GT_TP3_REG 		0X8160		//ç¬¬ä¸‰ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define GT_TP4_REG 		0X8168		//ç¬¬å››ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define GT_TP5_REG 		0X8170		//ç¬¬äº”ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€  
  
  
 
-uint8_t GT1151_WR_Reg(uint16_t reg, uint8_t *buf, uint8_t len);  //Ğ´¼Ä´æÆ÷
-void GT1151_RD_Reg(uint16_t reg, uint8_t *buf, uint8_t len);     //¶Á¼Ä´æÆ÷
-uint8_t GT1151_Init(void);               //GT1151µçÈİ´¥ÃşÆÁ³õÊ¼»¯º¯Êı
-uint8_t GT1151_Scan(uint8_t mode);       //µçÈİ´¥ÃşÆÁÉ¨Ãèº¯Êı
+uint8_t GT1151_WR_Reg(uint16_t reg, uint8_t *buf, uint8_t len);  //å†™å¯„å­˜å™¨
+void GT1151_RD_Reg(uint16_t reg, uint8_t *buf, uint8_t len);     //è¯»å¯„å­˜å™¨
+uint8_t GT1151_Init(void);               //GT1151ç”µå®¹è§¦æ‘¸å±åˆå§‹åŒ–å‡½æ•°
+uint8_t GT1151_Scan(uint8_t mode);       //ç”µå®¹è§¦æ‘¸å±æ‰«æå‡½æ•°
 #endif
 
 

@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* µçÈİ´¥ÃşÆÁÇı¶¯-IICÍ¨ĞÅ²¿·Ö	´úÂë	   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* ç”µå®¹è§¦æ‘¸å±é©±åŠ¨-IICé€šä¿¡éƒ¨åˆ†	ä»£ç 	   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef __MYCT_IIC_H
@@ -10,21 +10,21 @@
 
 
 
-//IO²Ù×÷º¯Êı	 
+//IOæ“ä½œå‡½æ•°	 
 #define CT_IIC_SCL(x)    gpio_pin_set(GPIOC, GPIO_PIN_0, x) 		  	//SCL     
 #define CT_IIC_SDA(x)    gpio_pin_set(GPIOC, GPIO_PIN_3, x) 			  //SDA	 
-#define CT_READ_SDA      gpio_input_bit_get(GPIOC,GPIO_PIN_3)  			//¶ÁÈ¡SDA 
+#define CT_READ_SDA      gpio_input_bit_get(GPIOC,GPIO_PIN_3)  			//è¯»å–SDA 
  
 
-//IICËùÓĞ²Ù×÷º¯Êı
-void CT_IIC_Init(void);                	//³õÊ¼»¯IICµÄIO¿Ú				 
-void CT_IIC_Start(void);				        //·¢ËÍIIC¿ªÊ¼ĞÅºÅ
-void CT_IIC_Stop(void);	  				      //·¢ËÍIICÍ£Ö¹ĞÅºÅ
-void CT_IIC_Ack(void);					        //IIC·¢ËÍACKĞÅºÅ
-void CT_IIC_NAck(void);					        //IIC²»·¢ËÍACKĞÅºÅ
-uint8_t CT_IIC_Wait_Ack(void); 				  //IICµÈ´ıACKĞÅºÅ
-void CT_IIC_Send_Byte(uint8_t data);		//IIC·¢ËÍÒ»¸ö×Ö½Ú
-uint8_t CT_IIC_Read_Byte(uint8_t ack);	//IIC¶ÁÈ¡Ò»¸ö×Ö½Ú
+//IICæ‰€æœ‰æ“ä½œå‡½æ•°
+void CT_IIC_Init(void);                	//åˆå§‹åŒ–IICçš„IOå£				 
+void CT_IIC_Start(void);				        //å‘é€IICå¼€å§‹ä¿¡å·
+void CT_IIC_Stop(void);	  				      //å‘é€IICåœæ­¢ä¿¡å·
+void CT_IIC_Ack(void);					        //IICå‘é€ACKä¿¡å·
+void CT_IIC_NAck(void);					        //IICä¸å‘é€ACKä¿¡å·
+uint8_t CT_IIC_Wait_Ack(void); 				  //IICç­‰å¾…ACKä¿¡å·
+void CT_IIC_Send_Byte(uint8_t data);		//IICå‘é€ä¸€ä¸ªå­—èŠ‚
+uint8_t CT_IIC_Read_Byte(uint8_t ack);	//IICè¯»å–ä¸€ä¸ªå­—èŠ‚
 
 #endif
 

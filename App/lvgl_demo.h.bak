@@ -1,11 +1,11 @@
 /************************************************
-* WKS Mini GD32å¼€å‘æ¿
+* WKS Mini GD32¿ª·¢°å
 * LVGL
 ************************************************/
 #ifndef __LVGL_DEMO_H
 #define __LVGL_DEMO_H
 
 
-void lvgl_demo(void);   /* lvglä¾‹ç¨‹ */
+void lvgl_demo(void);   /* lvglÀı³Ì */
 
 #endif

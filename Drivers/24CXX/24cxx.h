@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* 24CXX Çı¶¯´úÂë		   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* 24CXX é©±åŠ¨ä»£ç 		   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef _24CXX_H
@@ -20,16 +20,16 @@
 #define AT24C128	  16383
 #define AT24C256	  32767  
 
-//Mini GD32¿ª·¢°åÊ¹ÓÃµÄÊÇ24c02£¬ËùÒÔ¶¨ÒåEE_TYPEÎªAT24C02
+//Mini GD32å¼€å‘æ¿ä½¿ç”¨çš„æ˜¯24c02ï¼Œæ‰€ä»¥å®šä¹‰EE_TYPEä¸ºAT24C02
 #define EE_TYPE AT24C02
 		
-void AT24CXX_Init(void);        //³õÊ¼»¯IIC		
-uint8_t AT24CXX_Check(void);    //¼ì²éÆ÷¼ş
-uint8_t AT24CXX_ReadOneByte(uint16_t ReadAddr);							          //Ö¸¶¨µØÖ·¶ÁÈ¡Ò»¸ö×Ö½Ú
-void AT24CXX_WriteOneByte(uint16_t WriteAddr, uint8_t DataToWrite);		//Ö¸¶¨µØÖ·Ğ´ÈëÒ»¸ö×Ö½Ú
-void AT24CXX_WriteLenByte(uint16_t WriteAddr,uint32_t DataToWrite,uint8_t Len); //Ö¸¶¨µØÖ·¿ªÊ¼Ğ´ÈëÖ¸¶¨³¤¶ÈµÄÊı¾İ
-uint32_t AT24CXX_ReadLenByte(uint16_t ReadAddr,uint8_t Len);					          //Ö¸¶¨µØÖ·¿ªÊ¼¶ÁÈ¡Ö¸¶¨³¤¶ÈµÄÊı¾İ
-void AT24CXX_Read(uint16_t ReadAddr, uint8_t *pBuffer, uint16_t NumToRead);   	//´ÓÖ¸¶¨µØÖ·¿ªÊ¼¶Á³öÖ¸¶¨³¤¶ÈµÄÊı¾İ
-void AT24CXX_Write(uint16_t WriteAddr, uint8_t *pBuffer, uint16_t NumToWrite);	//´ÓÖ¸¶¨µØÖ·¿ªÊ¼Ğ´ÈëÖ¸¶¨³¤¶ÈµÄÊı¾İ
+void AT24CXX_Init(void);        //åˆå§‹åŒ–IIC		
+uint8_t AT24CXX_Check(void);    //æ£€æŸ¥å™¨ä»¶
+uint8_t AT24CXX_ReadOneByte(uint16_t ReadAddr);							          //æŒ‡å®šåœ°å€è¯»å–ä¸€ä¸ªå­—èŠ‚
+void AT24CXX_WriteOneByte(uint16_t WriteAddr, uint8_t DataToWrite);		//æŒ‡å®šåœ°å€å†™å…¥ä¸€ä¸ªå­—èŠ‚
+void AT24CXX_WriteLenByte(uint16_t WriteAddr,uint32_t DataToWrite,uint8_t Len); //æŒ‡å®šåœ°å€å¼€å§‹å†™å…¥æŒ‡å®šé•¿åº¦çš„æ•°æ®
+uint32_t AT24CXX_ReadLenByte(uint16_t ReadAddr,uint8_t Len);					          //æŒ‡å®šåœ°å€å¼€å§‹è¯»å–æŒ‡å®šé•¿åº¦çš„æ•°æ®
+void AT24CXX_Read(uint16_t ReadAddr, uint8_t *pBuffer, uint16_t NumToRead);   	//ä»æŒ‡å®šåœ°å€å¼€å§‹è¯»å‡ºæŒ‡å®šé•¿åº¦çš„æ•°æ®
+void AT24CXX_Write(uint16_t WriteAddr, uint8_t *pBuffer, uint16_t NumToWrite);	//ä»æŒ‡å®šåœ°å€å¼€å§‹å†™å…¥æŒ‡å®šé•¿åº¦çš„æ•°æ®
 
 #endif

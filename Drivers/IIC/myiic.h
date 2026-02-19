@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* IICÇı¶¯ ´úÂë		   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* IICé©±åŠ¨ ä»£ç 		   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef _MYIIC_H
@@ -9,20 +9,20 @@
 #include "sys.h"
 
 
-//IO²Ù×÷
+//IOæ“ä½œ
 #define IIC_SCL(x)          gpio_pin_set(GPIOC, GPIO_PIN_12, x)    //SCL
 #define IIC_SDA(x)          gpio_pin_set(GPIOC, GPIO_PIN_11, x)    //SDA
-#define IIC_READ_SDA        gpio_input_bit_get(GPIOC,GPIO_PIN_11)  //¶ÁÈ¡SDA
+#define IIC_READ_SDA        gpio_input_bit_get(GPIOC,GPIO_PIN_11)  //è¯»å–SDA
 
-//IICËùÓĞ²Ù×÷º¯Êı
-void IIC_Init(void);                //³õÊ¼»¯IICµÄIO¿Ú				 
-void IIC_Start(void);				        //·¢ËÍIIC¿ªÊ¼ĞÅºÅ
-void IIC_Stop(void);	  			      //·¢ËÍIICÍ£Ö¹ĞÅºÅ
-void IIC_Ack(void);					        //IIC·¢ËÍACKĞÅºÅ
-void IIC_NAck(void);				        //IIC²»·¢ËÍACKĞÅºÅ
-uint8_t IIC_Wait_Ack(void); 				//IICµÈ´ıACKĞÅºÅ
-void IIC_Send_Byte(uint8_t data);		//IIC·¢ËÍÒ»¸ö×Ö½Ú
-uint8_t IIC_Read_Byte(uint8_t ack); //IIC¶ÁÈ¡Ò»¸ö×Ö½Ú
+//IICæ‰€æœ‰æ“ä½œå‡½æ•°
+void IIC_Init(void);                //åˆå§‹åŒ–IICçš„IOå£				 
+void IIC_Start(void);				        //å‘é€IICå¼€å§‹ä¿¡å·
+void IIC_Stop(void);	  			      //å‘é€IICåœæ­¢ä¿¡å·
+void IIC_Ack(void);					        //IICå‘é€ACKä¿¡å·
+void IIC_NAck(void);				        //IICä¸å‘é€ACKä¿¡å·
+uint8_t IIC_Wait_Ack(void); 				//IICç­‰å¾…ACKä¿¡å·
+void IIC_Send_Byte(uint8_t data);		//IICå‘é€ä¸€ä¸ªå­—èŠ‚
+uint8_t IIC_Read_Byte(uint8_t ack); //IICè¯»å–ä¸€ä¸ªå­—èŠ‚
  
 #endif
 

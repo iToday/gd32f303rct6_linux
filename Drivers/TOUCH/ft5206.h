@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* µçÈÝ´¥ÃþÆÁ-FT5206 Çý¶¯´úÂë		   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* ç”µå®¹è§¦æ‘¸å±-FT5206 é©±åŠ¨ä»£ç 		   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef __FT5206_H
@@ -9,30 +9,30 @@
 #include "sys.h"	
 
 
-//ÓëµçÈÝ´¥ÃþÆÁÁ¬½ÓµÄÐ¾Æ¬Òý½Å(Î´°üº¬IICÒý½Å) 
-//IO²Ù×÷º¯Êý	 
-#define FT_RST(x)    			gpio_pin_set(GPIOC, GPIO_PIN_13, x)	  //FT5206¸´Î»Òý½Å
-#define FT_INT    			 	gpio_input_bit_get(GPIOC,GPIO_PIN_1)	//FT5206ÖÐ¶ÏÒý½Å	
+//ä¸Žç”µå®¹è§¦æ‘¸å±è¿žæŽ¥çš„èŠ¯ç‰‡å¼•è„š(æœªåŒ…å«IICå¼•è„š) 
+//IOæ“ä½œå‡½æ•°	 
+#define FT_RST(x)    			gpio_pin_set(GPIOC, GPIO_PIN_13, x)	  //FT5206å¤ä½å¼•è„š
+#define FT_INT    			 	gpio_input_bit_get(GPIOC,GPIO_PIN_1)	//FT5206ä¸­æ–­å¼•è„š	
 
-//ICC¶ÁÐ´ÃüÁî	
-#define FT_CMD_WR 				     0X70       //Ð´ÃüÁî
-#define FT_CMD_RD 				     0X71		    //¶ÁÃüÁî
+//ICCè¯»å†™å‘½ä»¤	
+#define FT_CMD_WR 				     0X70       //å†™å‘½ä»¤
+#define FT_CMD_RD 				     0X71		    //è¯»å‘½ä»¤
   
-//FT5206 ²¿·Ö¼Ä´æÆ÷¶¨Òå 
-#define FT_DEVIDE_MODE 			   0x00   	  //FT5206Ä£Ê½¿ØÖÆ¼Ä´æÆ÷
-#define FT_REG_NUM_FINGER      0x02		    //´¥Ãþ×´Ì¬¼Ä´æÆ÷
+//FT5206 éƒ¨åˆ†å¯„å­˜å™¨å®šä¹‰ 
+#define FT_DEVIDE_MODE 			   0x00   	  //FT5206æ¨¡å¼æŽ§åˆ¶å¯„å­˜å™¨
+#define FT_REG_NUM_FINGER      0x02		    //è§¦æ‘¸çŠ¶æ€å¯„å­˜å™¨
 
-#define FT_TP1_REG 				     0X03	  	  //µÚÒ»¸ö´¥ÃþµãÊý¾ÝµØÖ·
-#define FT_TP2_REG 				     0X09		    //µÚ¶þ¸ö´¥ÃþµãÊý¾ÝµØÖ·
-#define FT_TP3_REG 				     0X0F		    //µÚÈý¸ö´¥ÃþµãÊý¾ÝµØÖ·
-#define FT_TP4_REG 				     0X15		    //µÚËÄ¸ö´¥ÃþµãÊý¾ÝµØÖ·
-#define FT_TP5_REG 				     0X1B		    //µÚÎå¸ö´¥ÃþµãÊý¾ÝµØÖ·  
+#define FT_TP1_REG 				     0X03	  	  //ç¬¬ä¸€ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define FT_TP2_REG 				     0X09		    //ç¬¬äºŒä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define FT_TP3_REG 				     0X0F		    //ç¬¬ä¸‰ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define FT_TP4_REG 				     0X15		    //ç¬¬å››ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€
+#define FT_TP5_REG 				     0X1B		    //ç¬¬äº”ä¸ªè§¦æ‘¸ç‚¹æ•°æ®åœ°å€  
  
 
-#define	FT_ID_G_LIB_VERSION		 0xA1		    //°æ±¾		
-#define FT_ID_G_MODE 			     0xA4   		//FT5206ÖÐ¶ÏÄ£Ê½¿ØÖÆ¼Ä´æÆ÷
-#define FT_ID_G_THGROUP			   0x80   		//´¥ÃþÓÐÐ§ÖµÉèÖÃ¼Ä´æÆ÷
-#define FT_ID_G_PERIODACTIVE   0x88   		//¼¤»î×´Ì¬ÖÜÆÚÉèÖÃ¼Ä´æÆ÷
+#define	FT_ID_G_LIB_VERSION		 0xA1		    //ç‰ˆæœ¬		
+#define FT_ID_G_MODE 			     0xA4   		//FT5206ä¸­æ–­æ¨¡å¼æŽ§åˆ¶å¯„å­˜å™¨
+#define FT_ID_G_THGROUP			   0x80   		//è§¦æ‘¸æœ‰æ•ˆå€¼è®¾ç½®å¯„å­˜å™¨
+#define FT_ID_G_PERIODACTIVE   0x88   		//æ¿€æ´»çŠ¶æ€å‘¨æœŸè®¾ç½®å¯„å­˜å™¨
 
 
 uint8_t FT5206_WR_Reg(uint16_t reg, uint8_t *buf, uint8_t len);

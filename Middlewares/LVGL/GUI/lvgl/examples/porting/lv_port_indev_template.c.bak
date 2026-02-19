@@ -12,7 +12,7 @@
 #include "lv_port_indev_template.h"
 #include "../../lvgl.h"
 
-/* å¯¼å…¥é©±åŠ¨å¤´æ–‡ä»¶ */
+/* µ¼ÈëÇı¶¯Í·ÎÄ¼ş */
 #include "touch.h"
 #include "lcd.h"
 #include "key.h"
@@ -29,29 +29,29 @@
  *  STATIC PROTOTYPES
  **********************/
 
-/* è§¦æ‘¸å± */
+/* ´¥ÃşÆÁ */
 static void touchpad_init(void);
 static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 static bool touchpad_is_pressed(void);
 static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y);
 
-///* é¼ æ ‡ */
+///* Êó±ê */
 //static void mouse_init(void);
 //static void mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 //static bool mouse_is_pressed(void);
 //static void mouse_get_xy(lv_coord_t * x, lv_coord_t * y);
 
-///* é”®ç›˜ */
+///* ¼üÅÌ */
 //static void keypad_init(void);
 //static void keypad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 //static uint32_t keypad_get_key(void);
 
-///* ç¼–ç å™¨ */
+///* ±àÂëÆ÷ */
 //static void encoder_init(void);
 //static void encoder_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 //static void encoder_handler(void);
 
-///* æŒ‰é’® */
+///* °´Å¥ */
 //static void button_init(void);
 //static void button_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 //static int8_t button_get_pressed_id(void);
@@ -60,13 +60,13 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y);
 /**********************
  *  STATIC VARIABLES
  **********************/
-lv_indev_t * indev_touchpad;    // è§¦æ‘¸å±
-//lv_indev_t * indev_mouse;       // é¼ æ ‡
-//lv_indev_t * indev_keypad;      // é”®ç›˜
-//lv_indev_t * indev_encoder;     // ç¼–ç å™¨
-//lv_indev_t * indev_button;      // æŒ‰é’®
+lv_indev_t * indev_touchpad;    // ´¥ÃşÆÁ
+//lv_indev_t * indev_mouse;       // Êó±ê
+//lv_indev_t * indev_keypad;      // ¼üÅÌ
+//lv_indev_t * indev_encoder;     // ±àÂëÆ÷
+//lv_indev_t * indev_button;      // °´Å¥
 
-///* ç¼–ç å™¨ç›¸å…³ */
+///* ±àÂëÆ÷Ïà¹Ø */
 //static int32_t encoder_diff;
 //static lv_indev_state_t encoder_state;
 
@@ -79,109 +79,109 @@ lv_indev_t * indev_touchpad;    // è§¦æ‘¸å±
  **********************/
 
 /*
-å‡½æ•°åï¼šlv_port_indev_init
-åŠŸèƒ½ï¼šåˆå§‹åŒ–å¹¶æ³¨å†Œè¾“å…¥è®¾å¤‡
-å¤‡æ³¨ï¼šæ— 
+º¯ÊıÃû£ºlv_port_indev_init
+¹¦ÄÜ£º³õÊ¼»¯²¢×¢²áÊäÈëÉè±¸
+±¸×¢£ºÎŞ
 */
 void lv_port_indev_init(void)
 {
     /**
      * 
-     * åœ¨è¿™é‡Œä½ å¯ä»¥æ‰¾åˆ° LittlevGL æ”¯æŒçš„å‡ºå…¥è®¾å¤‡çš„å®ç°ç¤ºä¾‹:
-     *  - è§¦æ‘¸å±
-     *  - é¼ æ ‡ (æ”¯æŒå…‰æ ‡)
-     *  - é”®ç›˜ (ä»…æ”¯æŒæŒ‰é”®çš„ GUI ç”¨æ³•)
-     *  - ç¼–ç å™¨ (æ”¯æŒçš„ GUI ç”¨æ³•ä»…åŒ…æ‹¬: å·¦, å³, æŒ‰ä¸‹)
-     *  - æŒ‰é’® (æŒ‰ä¸‹å±å¹•ä¸ŠæŒ‡å®šç‚¹çš„å¤–éƒ¨æŒ‰é’®)
+     * ÔÚÕâÀïÄã¿ÉÒÔÕÒµ½ LittlevGL Ö§³ÖµÄ³öÈëÉè±¸µÄÊµÏÖÊ¾Àı:
+     *  - ´¥ÃşÆÁ
+     *  - Êó±ê (Ö§³Ö¹â±ê)
+     *  - ¼üÅÌ (½öÖ§³Ö°´¼üµÄ GUI ÓÃ·¨)
+     *  - ±àÂëÆ÷ (Ö§³ÖµÄ GUI ÓÃ·¨½ö°üÀ¨: ×ó, ÓÒ, °´ÏÂ)
+     *  - °´Å¥ (°´ÏÂÆÁÄ»ÉÏÖ¸¶¨µãµÄÍâ²¿°´Å¥)
      *
-     *  å‡½æ•° `..._read()` åªæ˜¯ç¤ºä¾‹
-     *  ä½ éœ€è¦æ ¹æ®å…·ä½“çš„ç¡¬ä»¶æ¥å®Œæˆè¿™äº›å‡½æ•°
+     *  º¯Êı `..._read()` Ö»ÊÇÊ¾Àı
+     *  ÄãĞèÒª¸ù¾İ¾ßÌåµÄÓ²¼şÀ´Íê³ÉÕâĞ©º¯Êı
      */
 
     static lv_indev_drv_t indev_drv;
 
     /*------------------
-     * è§¦æ‘¸å±
+     * ´¥ÃşÆÁ
      * -----------------*/
 
-    /* åˆå§‹åŒ–è§¦æ‘¸å±(å¦‚æœæœ‰) */
+    /* ³õÊ¼»¯´¥ÃşÆÁ(Èç¹ûÓĞ) */
     touchpad_init();
 
-    /* æ³¨å†Œè§¦æ‘¸å±è¾“å…¥è®¾å¤‡ */
+    /* ×¢²á´¥ÃşÆÁÊäÈëÉè±¸ */
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_POINTER;
     indev_drv.read_cb = touchpad_read;
     indev_touchpad = lv_indev_drv_register(&indev_drv);
 
     /*------------------
-     * é¼ æ ‡
+     * Êó±ê
      * -----------------*/
 
-    /* åˆå§‹åŒ–é¼ æ ‡(å¦‚æœæœ‰) */
+    /* ³õÊ¼»¯Êó±ê(Èç¹ûÓĞ) */
 //    mouse_init();
 
-//    /* æ³¨å†Œé¼ æ ‡è¾“å…¥è®¾å¤‡ */
+//    /* ×¢²áÊó±êÊäÈëÉè±¸ */
 //    lv_indev_drv_init(&indev_drv);
 //    indev_drv.type = LV_INDEV_TYPE_POINTER;
 //    indev_drv.read_cb = mouse_read;
 //    indev_mouse = lv_indev_drv_register(&indev_drv);
 
-//    /* è®¾ç½®å…‰æ ‡ï¼Œä¸ºäº†ç®€å•èµ·è§ï¼Œç°åœ¨è®¾ç½®ä¸ºä¸€ä¸ª HOME ç¬¦å· */
+//    /* ÉèÖÃ¹â±ê£¬ÎªÁË¼òµ¥Æğ¼û£¬ÏÖÔÚÉèÖÃÎªÒ»¸ö HOME ·ûºÅ */
 //    lv_obj_t * mouse_cursor = lv_img_create(lv_scr_act());
 //    lv_img_set_src(mouse_cursor, LV_SYMBOL_HOME);
 //    lv_indev_set_cursor(indev_mouse, mouse_cursor);
 
 //    /*------------------
-//     * é”®ç›˜
+//     * ¼üÅÌ
 //     * -----------------*/
 
-//    /* åˆå§‹åŒ–é”®ç›˜(å¦‚æœæœ‰) */
+//    /* ³õÊ¼»¯¼üÅÌ(Èç¹ûÓĞ) */
 //    keypad_init();
 
-//    /* æ³¨å†Œé”®ç›˜è¾“å…¥è®¾å¤‡ */
+//    /* ×¢²á¼üÅÌÊäÈëÉè±¸ */
 //    lv_indev_drv_init(&indev_drv);
 //    indev_drv.type = LV_INDEV_TYPE_KEYPAD;
 //    indev_drv.read_cb = keypad_read;
 //    indev_keypad = lv_indev_drv_register(&indev_drv);
 
-//    /* æ¥ç€ä½ éœ€è¦ç”¨ `lv_group_t * group = lv_group_create()` æ¥åˆ›å»ºç»„
-//     * ç”¨ `lv_group_add_obj(group, obj)` å¾€ç»„ä¸­æ·»åŠ ç‰©ä½“
-//     * å¹¶å°†è¿™ä¸ªè¾“å…¥è®¾å¤‡åˆ†é…åˆ°ç»„ä¸­ï¼Œä»¥å¯¼èˆªåˆ°å®ƒ:
+//    /* ½Ó×ÅÄãĞèÒªÓÃ `lv_group_t * group = lv_group_create()` À´´´½¨×é
+//     * ÓÃ `lv_group_add_obj(group, obj)` Íù×éÖĞÌí¼ÓÎïÌå
+//     * ²¢½«Õâ¸öÊäÈëÉè±¸·ÖÅäµ½×éÖĞ£¬ÒÔµ¼º½µ½Ëü:
 //     * `lv_indev_set_group(indev_keypad, group);` */
 
 //    /*------------------
-//     * ç¼–ç å™¨
+//     * ±àÂëÆ÷
 //     * -----------------*/
 
-//    /* åˆå§‹åŒ–ç¼–ç å™¨(å¦‚æœæœ‰) */
+//    /* ³õÊ¼»¯±àÂëÆ÷(Èç¹ûÓĞ) */
 //    encoder_init();
 
-//    /* æ³¨å†Œç¼–ç å™¨è¾“å…¥è®¾å¤‡ */
+//    /* ×¢²á±àÂëÆ÷ÊäÈëÉè±¸ */
 //    lv_indev_drv_init(&indev_drv);
 //    indev_drv.type = LV_INDEV_TYPE_ENCODER;
 //    indev_drv.read_cb = encoder_read;
 //    indev_encoder = lv_indev_drv_register(&indev_drv);
 
-//    /* æ¥ç€ä½ éœ€è¦ç”¨ `lv_group_t * group = lv_group_create()` æ¥åˆ›å»ºç»„
-//     * ç”¨ `lv_group_add_obj(group, obj)` å¾€ç»„ä¸­æ·»åŠ ç‰©ä½“
-//     * å¹¶å°†è¿™ä¸ªè¾“å…¥è®¾å¤‡åˆ†é…åˆ°ç»„ä¸­ï¼Œä»¥å¯¼èˆªåˆ°å®ƒ:
+//    /* ½Ó×ÅÄãĞèÒªÓÃ `lv_group_t * group = lv_group_create()` À´´´½¨×é
+//     * ÓÃ `lv_group_add_obj(group, obj)` Íù×éÖĞÌí¼ÓÎïÌå
+//     * ²¢½«Õâ¸öÊäÈëÉè±¸·ÖÅäµ½×éÖĞ£¬ÒÔµ¼º½µ½Ëü:
 //     * `lv_indev_set_group(indev_keypad, group);` */
 
 //    /*------------------
-//     * æŒ‰é’®
+//     * °´Å¥
 //     * -----------------*/
 
-//    /* åˆå§‹åŒ–æŒ‰é’®(å¦‚æœæœ‰) */
+//    /* ³õÊ¼»¯°´Å¥(Èç¹ûÓĞ) */
 //    button_init();
 
-//    /* æ³¨å†ŒæŒ‰é’®è¾“å…¥è®¾å¤‡ */
+//    /* ×¢²á°´Å¥ÊäÈëÉè±¸ */
 //    lv_indev_drv_init(&indev_drv);
 //    indev_drv.type = LV_INDEV_TYPE_BUTTON;
 //    indev_drv.read_cb = button_read;
 //    indev_button = lv_indev_drv_register(&indev_drv);
 
-//    /* ä¸ºæŒ‰é’®åˆ†é…å±å¹•ä¸Šçš„ç‚¹
-//     * ä»¥æ­¤æ¥ç”¨æŒ‰é’®æ¨¡æ‹Ÿç‚¹å‡»å±å¹•ä¸Šå¯¹åº”çš„ç‚¹ */
+//    /* Îª°´Å¥·ÖÅäÆÁÄ»ÉÏµÄµã
+//     * ÒÔ´ËÀ´ÓÃ°´Å¥Ä£Äâµã»÷ÆÁÄ»ÉÏ¶ÔÓ¦µÄµã */
 //    static const lv_point_t btn_points[2] = {
 //            {10, 10},   /*Button 0 -> x:10; y:10*/
 //            {40, 100},  /*Button 1 -> x:40; y:100*/
@@ -194,13 +194,13 @@ void lv_port_indev_init(void)
  **********************/
 
 /*------------------
- * è§¦æ‘¸å±
+ * ´¥ÃşÆÁ
  * -----------------*/
 
 /*
-å‡½æ•°åï¼štouchpad_init
-åŠŸèƒ½ï¼šåˆå§‹åŒ–è§¦æ‘¸å±
-å¤‡æ³¨ï¼šæ— 
+º¯ÊıÃû£ºtouchpad_init
+¹¦ÄÜ£º³õÊ¼»¯´¥ÃşÆÁ
+±¸×¢£ºÎŞ
 */
 static void touchpad_init(void)
 {
@@ -209,18 +209,18 @@ static void touchpad_init(void)
 
 /*Will be called by the library to read the touchpad*/
 /*
-å‡½æ•°åï¼štouchpad_read
-åŠŸèƒ½ï¼šå›¾å½¢åº“çš„è§¦æ‘¸å±è¯»å–å›è°ƒå‡½æ•°
-å‚æ•°ï¼šindev_drv   : è§¦æ‘¸å±è®¾å¤‡
-      data        : è¾“å…¥è®¾å¤‡æ•°æ®ç»“æ„ä½“
-å¤‡æ³¨ï¼šæ— 
+º¯ÊıÃû£ºtouchpad_read
+¹¦ÄÜ£ºÍ¼ĞÎ¿âµÄ´¥ÃşÆÁ¶ÁÈ¡»Øµ÷º¯Êı
+²ÎÊı£ºindev_drv   : ´¥ÃşÆÁÉè±¸
+      data        : ÊäÈëÉè±¸Êı¾İ½á¹¹Ìå
+±¸×¢£ºÎŞ
 */
 static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 {
     static lv_coord_t last_x = 0;
     static lv_coord_t last_y = 0;
 	
-	  tp_dev.scan(0);      //è§¦æ‘¸å±æ‰«æ
+	  tp_dev.scan(0);      //´¥ÃşÆÁÉ¨Ãè
 
     if(touchpad_is_pressed()) 
 		{
@@ -232,18 +232,18 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
         data->state = LV_INDEV_STATE_REL;
     }
 
-		/* è®¾ç½®æœ€åæŒ‰ä¸‹çš„åæ ‡ */
+		/* ÉèÖÃ×îºó°´ÏÂµÄ×ø±ê */
 		data->point.x = last_x;
 		data->point.y = last_y;
 }
 
 /*Return true is the touchpad is pressed*/
 /*
-å‡½æ•°åï¼štouchpad_is_pressed
-åŠŸèƒ½ï¼šè·å–è§¦æ‘¸å±è®¾å¤‡çš„çŠ¶æ€
-å‚æ•°ï¼šæ— 
-è¿”å›å€¼ï¼šè¿”å›è§¦æ‘¸å±è®¾å¤‡æ˜¯å¦è¢«æŒ‰ä¸‹
-å¤‡æ³¨ï¼šæ— 
+º¯ÊıÃû£ºtouchpad_is_pressed
+¹¦ÄÜ£º»ñÈ¡´¥ÃşÆÁÉè±¸µÄ×´Ì¬
+²ÎÊı£ºÎŞ
+·µ»ØÖµ£º·µ»Ø´¥ÃşÆÁÉè±¸ÊÇ·ñ±»°´ÏÂ
+±¸×¢£ºÎŞ
 */
 static bool touchpad_is_pressed(void)
 {
@@ -259,12 +259,12 @@ static bool touchpad_is_pressed(void)
 
 /*Get the x and y coordinates if the touchpad is pressed*/
 /*
-å‡½æ•°åï¼štouchpad_get_xy
-åŠŸèƒ½ï¼šåœ¨è§¦æ‘¸å±è¢«æŒ‰ä¸‹çš„æ—¶å€™è¯»å– xã€y åæ ‡
-å‚æ•°ï¼šx   : xåæ ‡çš„æŒ‡é’ˆ
-      y   : yåæ ‡çš„æŒ‡é’ˆ
-è¿”å›å€¼ï¼šæ— 
-å¤‡æ³¨ï¼šæ— 
+º¯ÊıÃû£ºtouchpad_get_xy
+¹¦ÄÜ£ºÔÚ´¥ÃşÆÁ±»°´ÏÂµÄÊ±ºò¶ÁÈ¡ x¡¢y ×ø±ê
+²ÎÊı£ºx   : x×ø±êµÄÖ¸Õë
+      y   : y×ø±êµÄÖ¸Õë
+·µ»ØÖµ£ºÎŞ
+±¸×¢£ºÎŞ
 */
 static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
@@ -274,16 +274,16 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 }
 
 ///*------------------
-// * é¼ æ ‡
+// * Êó±ê
 // * -----------------*/
 
 ///*Initialize your mouse*/
 ///*
-//å‡½æ•°åï¼šmouse_init
-//åŠŸèƒ½ï¼šåˆå§‹åŒ–é¼ æ ‡
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºmouse_init
+//¹¦ÄÜ£º³õÊ¼»¯Êó±ê
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void mouse_init(void)
 //{
@@ -292,19 +292,19 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Will be called by the library to read the mouse*/
 ///*
-//å‡½æ•°åï¼šmouse_read
-//åŠŸèƒ½ï¼šå›¾å½¢åº“çš„é¼ æ ‡è¯»å–å›è°ƒå‡½æ•°
-//å‚æ•°ï¼šindev_drv   : é¼ æ ‡è®¾å¤‡
-//      data        : è¾“å…¥è®¾å¤‡æ•°æ®ç»“æ„ä½“
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºmouse_read
+//¹¦ÄÜ£ºÍ¼ĞÎ¿âµÄÊó±ê¶ÁÈ¡»Øµ÷º¯Êı
+//²ÎÊı£ºindev_drv   : Êó±êÉè±¸
+//      data        : ÊäÈëÉè±¸Êı¾İ½á¹¹Ìå
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 //{
-//    /* è·å–å½“å‰çš„ xã€y åæ ‡ */
+//    /* »ñÈ¡µ±Ç°µÄ x¡¢y ×ø±ê */
 //    mouse_get_xy(&data->point.x, &data->point.y);
 
-//    /* è·å–æ˜¯å¦æŒ‰ä¸‹æˆ–é‡Šæ”¾é¼ æ ‡æŒ‰é’® */
+//    /* »ñÈ¡ÊÇ·ñ°´ÏÂ»òÊÍ·ÅÊó±ê°´Å¥ */
 //    if(mouse_is_pressed()) {
 //        data->state = LV_INDEV_STATE_PR;
 //    } else {
@@ -314,11 +314,11 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Return true is the mouse button is pressed*/
 ///*
-//å‡½æ•°åï¼šmouse_is_pressed
-//åŠŸèƒ½ï¼šè·å–é¼ æ ‡è®¾å¤‡æ˜¯å¦è¢«æŒ‰ä¸‹
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šè¿”å›é¼ æ ‡è®¾å¤‡æ˜¯å¦è¢«æŒ‰ä¸‹
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºmouse_is_pressed
+//¹¦ÄÜ£º»ñÈ¡Êó±êÉè±¸ÊÇ·ñ±»°´ÏÂ
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£º·µ»ØÊó±êÉè±¸ÊÇ·ñ±»°´ÏÂ
+//±¸×¢£ºÎŞ
 //*/
 //static bool mouse_is_pressed(void)
 //{
@@ -329,12 +329,12 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Get the x and y coordinates if the mouse is pressed*/
 ///*
-//å‡½æ•°åï¼šmouse_get_xy
-//åŠŸèƒ½ï¼šå½“é¼ æ ‡è¢«æŒ‰ä¸‹æ—¶ï¼Œè·å–é¼ æ ‡çš„ xã€y åæ ‡
-//å‚æ•°ï¼šx   : xåæ ‡çš„æŒ‡é’ˆ
-//      y   : yåæ ‡çš„æŒ‡é’ˆ
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºmouse_get_xy
+//¹¦ÄÜ£ºµ±Êó±ê±»°´ÏÂÊ±£¬»ñÈ¡Êó±êµÄ x¡¢y ×ø±ê
+//²ÎÊı£ºx   : x×ø±êµÄÖ¸Õë
+//      y   : y×ø±êµÄÖ¸Õë
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void mouse_get_xy(lv_coord_t * x, lv_coord_t * y)
 //{
@@ -345,16 +345,16 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 //}
 
 ///*------------------
-// * é”®ç›˜
+// * ¼üÅÌ
 // * -----------------*/
 
 ///*Initialize your keypad*/
 ///*
-//å‡½æ•°åï¼škeypad_init
-//åŠŸèƒ½ï¼šåˆå§‹åŒ–é”®ç›˜
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºkeypad_init
+//¹¦ÄÜ£º³õÊ¼»¯¼üÅÌ
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void keypad_init(void)
 //{
@@ -363,28 +363,28 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Will be called by the library to read the mouse*/
 ///*
-//å‡½æ•°åï¼škeypad_read
-//åŠŸèƒ½ï¼šå›¾å½¢åº“çš„é”®ç›˜è¯»å–å›è°ƒå‡½æ•°
-//å‚æ•°ï¼šindev_drv : é”®ç›˜è®¾å¤‡
-//      data      : è¾“å…¥è®¾å¤‡æ•°æ®ç»“æ„ä½“
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºkeypad_read
+//¹¦ÄÜ£ºÍ¼ĞÎ¿âµÄ¼üÅÌ¶ÁÈ¡»Øµ÷º¯Êı
+//²ÎÊı£ºindev_drv : ¼üÅÌÉè±¸
+//      data      : ÊäÈëÉè±¸Êı¾İ½á¹¹Ìå
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void keypad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 //{
 //    static uint32_t last_key = 0;
 
-//	  /* è¿™æ®µä»£ç æ˜¯ LVGL ç»™å‡ºçš„ä¾‹å­ï¼Œè¿™é‡Œè·å–åæ ‡å¥½åƒæ˜¯å¤šä½™çš„ */
+//	  /* Õâ¶Î´úÂëÊÇ LVGL ¸ø³öµÄÀı×Ó£¬ÕâÀï»ñÈ¡×ø±êºÃÏñÊÇ¶àÓàµÄ */
 //    /*Get the current x and y coordinates*/
 //    mouse_get_xy(&data->point.x, &data->point.y);
 
-//	  /* è·å–æŒ‰é”®æ˜¯å¦è¢«æŒ‰ä¸‹ï¼Œå¹¶ä¿å­˜é”®å€¼ */
+//	  /* »ñÈ¡°´¼üÊÇ·ñ±»°´ÏÂ£¬²¢±£´æ¼üÖµ */
 //    /*Get whether the a key is pressed and save the pressed key*/
 //    uint32_t act_key = keypad_get_key();
 //    if(act_key != 0) {
 //        data->state = LV_INDEV_STATE_PR;
 
-//			  /* å°†é”®å€¼è½¬æ¢æˆ LVGL çš„æ§åˆ¶å­—ç¬¦ */
+//			  /* ½«¼üÖµ×ª»»³É LVGL µÄ¿ØÖÆ×Ö·û */
 //        /*Translate the keys to LVGL control characters according to your key definitions*/
 //        switch(act_key) {
 //        case 1:
@@ -414,11 +414,11 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Get the currently being pressed key.  0 if no key is pressed*/
 ///*
-//å‡½æ•°åï¼škeypad_get_key
-//åŠŸèƒ½ï¼šè·å–å½“å‰æ­£åœ¨æŒ‰ä¸‹çš„æŒ‰é”®
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºkeypad_get_key
+//¹¦ÄÜ£º»ñÈ¡µ±Ç°ÕıÔÚ°´ÏÂµÄ°´¼ü
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static uint32_t keypad_get_key(void)
 //{
@@ -428,16 +428,16 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 //}
 
 ///*------------------
-// * ç¼–ç å™¨
+// * ±àÂëÆ÷
 // * -----------------*/
 
 ///*Initialize your keypad*/
 ///*
-//å‡½æ•°åï¼šencoder_init
-//åŠŸèƒ½ï¼šåˆå§‹åŒ–ç¼–ç å™¨
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºencoder_init
+//¹¦ÄÜ£º³õÊ¼»¯±àÂëÆ÷
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void encoder_init(void)
 //{
@@ -446,12 +446,12 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Will be called by the library to read the encoder*/
 ///*
-//å‡½æ•°åï¼šencoder_read
-//åŠŸèƒ½ï¼šå›¾å½¢åº“çš„ç¼–ç å™¨è¯»å–å›è°ƒå‡½æ•°
-//å‚æ•°ï¼šindev_drv : ç¼–ç å™¨è®¾å¤‡
-//      data      : è¾“å…¥è®¾å¤‡æ•°æ®ç»“æ„ä½“
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºencoder_read
+//¹¦ÄÜ£ºÍ¼ĞÎ¿âµÄ±àÂëÆ÷¶ÁÈ¡»Øµ÷º¯Êı
+//²ÎÊı£ºindev_drv : ±àÂëÆ÷Éè±¸
+//      data      : ÊäÈëÉè±¸Êı¾İ½á¹¹Ìå
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void encoder_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 //{
@@ -462,11 +462,11 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Call this function in an interrupt to process encoder events (turn, press)*/
 ///*
-//å‡½æ•°åï¼šencoder_handler
-//åŠŸèƒ½ï¼šåœ¨ä¸­æ–­ä¸­è°ƒç”¨æ­¤å‡½æ•°ä»¥å¤„ç†ç¼–ç å™¨äº‹ä»¶(æ—‹è½¬ã€æŒ‰ä¸‹)
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºencoder_handler
+//¹¦ÄÜ£ºÔÚÖĞ¶ÏÖĞµ÷ÓÃ´Ëº¯ÊıÒÔ´¦Àí±àÂëÆ÷ÊÂ¼ş(Ğı×ª¡¢°´ÏÂ)
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void encoder_handler(void)
 //{
@@ -477,16 +477,16 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 //}
 
 ///*------------------
-// * æŒ‰é’®
+// * °´Å¥
 // * -----------------*/
 
 ///*Initialize your buttons*/
 ///*
-//å‡½æ•°åï¼šbutton_init
-//åŠŸèƒ½ï¼šåˆå§‹åŒ–æŒ‰é’®
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºbutton_init
+//¹¦ÄÜ£º³õÊ¼»¯°´Å¥
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void button_init(void)
 //{
@@ -495,19 +495,19 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 
 ///*Will be called by the library to read the button*/
 ///*
-//å‡½æ•°åï¼šbutton_read
-//åŠŸèƒ½ï¼šå›¾å½¢åº“çš„æŒ‰é’®è¯»å–å›è°ƒå‡½æ•°
-//å‚æ•°ï¼šindev_drv : æŒ‰é’®è®¾å¤‡
-//      data      : è¾“å…¥è®¾å¤‡æ•°æ®ç»“æ„ä½“
-//è¿”å›å€¼ï¼šæ— 
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºbutton_read
+//¹¦ÄÜ£ºÍ¼ĞÎ¿âµÄ°´Å¥¶ÁÈ¡»Øµ÷º¯Êı
+//²ÎÊı£ºindev_drv : °´Å¥Éè±¸
+//      data      : ÊäÈëÉè±¸Êı¾İ½á¹¹Ìå
+//·µ»ØÖµ£ºÎŞ
+//±¸×¢£ºÎŞ
 //*/
 //static void button_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 //{
 
 //    static uint8_t last_btn = 0;
 
-//    /* è·å–è¢«æŒ‰ä¸‹æŒ‰é’®çš„ID */
+//    /* »ñÈ¡±»°´ÏÂ°´Å¥µÄID */
 //    int8_t btn_act = button_get_pressed_id();
 
 //    if(btn_act >= 0) {
@@ -517,41 +517,41 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 //        data->state = LV_INDEV_STATE_REL;
 //    }
 
-//    /* ä¿å­˜æœ€åè¢«æŒ‰ä¸‹æŒ‰é’®çš„ID */
+//    /* ±£´æ×îºó±»°´ÏÂ°´Å¥µÄID */
 //    data->btn_id = last_btn;
 //}
 
 ///*Get ID  (0, 1, 2 ..) of the pressed button*/
 ///*
-//å‡½æ•°åï¼šbutton_get_pressed_id
-//åŠŸèƒ½ï¼šè·å–è¢«æŒ‰ä¸‹æŒ‰é’®çš„ID
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šè¢«æŒ‰ä¸‹æŒ‰é’®çš„ID
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºbutton_get_pressed_id
+//¹¦ÄÜ£º»ñÈ¡±»°´ÏÂ°´Å¥µÄID
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£º±»°´ÏÂ°´Å¥µÄID
+//±¸×¢£ºÎŞ
 //*/
 //static int8_t button_get_pressed_id(void)
 //{
 //    uint8_t i;
 
-//    /* æ£€æŸ¥é‚£ä¸ªæŒ‰é”®è¢«æŒ‰ä¸‹(è¿™é‡Œç»™å‡ºçš„ç¤ºä¾‹é€‚ç”¨äºä¸¤ä¸ªæŒ‰é’®çš„æƒ…å†µ) */
+//    /* ¼ì²éÄÇ¸ö°´¼ü±»°´ÏÂ(ÕâÀï¸ø³öµÄÊ¾ÀıÊÊÓÃÓÚÁ½¸ö°´Å¥µÄÇé¿ö) */
 //    for(i = 0; i < 2; i++) {
-//        /* è¿”å›è¢«æŒ‰ä¸‹æŒ‰é’®çš„ID */
+//        /* ·µ»Ø±»°´ÏÂ°´Å¥µÄID */
 //        if(button_is_pressed(i)) {
 //            return i;
 //        }
 //    }
 
-//    /* æ²¡æœ‰æŒ‰é’®è¢«æŒ‰ä¸‹ */
+//    /* Ã»ÓĞ°´Å¥±»°´ÏÂ */
 //    return -1;
 //}
 
 ///*Test if `id` button is pressed or not*/
 ///*
-//å‡½æ•°åï¼šbutton_is_pressed
-//åŠŸèƒ½ï¼šæ£€æŸ¥æŒ‡å®šIDçš„æŒ‰é’®æ˜¯å¦è¢«æŒ‰ä¸‹
-//å‚æ•°ï¼šæ— 
-//è¿”å›å€¼ï¼šæŒ‰é’®æ˜¯å¦è¢«æŒ‰ä¸‹
-//å¤‡æ³¨ï¼šæ— 
+//º¯ÊıÃû£ºbutton_is_pressed
+//¹¦ÄÜ£º¼ì²éÖ¸¶¨IDµÄ°´Å¥ÊÇ·ñ±»°´ÏÂ
+//²ÎÊı£ºÎŞ
+//·µ»ØÖµ£º°´Å¥ÊÇ·ñ±»°´ÏÂ
+//±¸×¢£ºÎŞ
 //*/
 //static bool button_is_pressed(uint8_t id)
 //{

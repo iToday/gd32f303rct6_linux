@@ -1,7 +1,7 @@
 /************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* ÄÚ´æ¹ÜÀí Çı¶¯´úÂë	   
-* °æ±¾£ºV1.0								  
+* WKS Mini GD32å¼€å‘æ¿
+* å†…å­˜ç®¡ç† é©±åŠ¨ä»£ç 	   
+* ç‰ˆæœ¬ï¼šV1.0								  
 ************************************************/	
 
 #ifndef __MALLOC_H
@@ -9,37 +9,37 @@
 #include "sys.h"
 
 
-//Èç¹ûÃ»ÓĞ¶¨ÒåNULL, ¶¨ÒåNULL 
+//å¦‚æœæ²¡æœ‰å®šä¹‰NULL, å®šä¹‰NULL 
 #ifndef NULL
 #define NULL 0
 #endif
 
-//ÄÚ´æ²ÎÊıÉè¶¨.
-#define MEM_BLOCK_SIZE		   	32  	  						              //ÄÚ´æ¿é´óĞ¡Îª32×Ö½Ú
-#define MEM_MAX_SIZE			    5*1024  						              //×î´ó¹ÜÀíÄÚ´æ 40K£¬GD32F303RCÄÚ²¿SRAM×Ü¹²48KB
-#define MEM_ALLOC_TABLE_SIZE	MEM_MAX_SIZE/MEM_BLOCK_SIZE 	    //ÄÚ´æ±í´óĞ¡
+//å†…å­˜å‚æ•°è®¾å®š.
+#define MEM_BLOCK_SIZE		   	32  	  						              //å†…å­˜å—å¤§å°ä¸º32å­—èŠ‚
+#define MEM_MAX_SIZE			    5*1024  						              //æœ€å¤§ç®¡ç†å†…å­˜ 40Kï¼ŒGD32F303RCå†…éƒ¨SRAMæ€»å…±48KB
+#define MEM_ALLOC_TABLE_SIZE	MEM_MAX_SIZE/MEM_BLOCK_SIZE 	    //å†…å­˜è¡¨å¤§å°
  
 		 
-//ÄÚ´æ¹ÜÀí¿ØÖÆÆ÷
+//å†…å­˜ç®¡ç†æ§åˆ¶å™¨
 struct _m_mallco_dev
 {
-		void (*init)(void);				  //³õÊ¼»¯
-		uint8_t  (*perused)(void);	//ÄÚ´æÊ¹ÓÃÂÊ
-		uint8_t 	*membase;					//ÄÚ´æ³Ø 
-		uint16_t  *memmap; 					//ÄÚ´æ¹ÜÀí×´Ì¬±í
-		uint8_t   memrdy; 					//ÄÚ´æ¹ÜÀíÊÇ·ñ¾ÍĞ÷
+		void (*init)(void);				  //åˆå§‹åŒ–
+		uint8_t  (*perused)(void);	//å†…å­˜ä½¿ç”¨ç‡
+		uint8_t 	*membase;					//å†…å­˜æ±  
+		uint16_t  *memmap; 					//å†…å­˜ç®¡ç†çŠ¶æ€è¡¨
+		uint8_t   memrdy; 					//å†…å­˜ç®¡ç†æ˜¯å¦å°±ç»ª
 };
 
-extern struct _m_mallco_dev mallco_dev;	//ÔÚmallco.cÀïÃæ¶¨Òå
+extern struct _m_mallco_dev mallco_dev;	//åœ¨mallco.cé‡Œé¢å®šä¹‰
 
-void mem_init(void);					                   //ÄÚ´æ¹ÜÀí³õÊ¼»¯º¯Êı(Íâ/ÄÚ²¿µ÷ÓÃ)
-uint8_t mem_perused(void);					             //»ñµÃÄÚ´æÊ¹ÓÃÂÊ(Íâ/ÄÚ²¿µ÷ÓÃ) 
-void mymemset(void *s,uint8_t c,uint32_t count); //ÉèÖÃÄÚ´æ
-void mymemcpy(void *des,void *src,uint32_t n);   //¸´ÖÆÄÚ´æ     
+void mem_init(void);					                   //å†…å­˜ç®¡ç†åˆå§‹åŒ–å‡½æ•°(å¤–/å†…éƒ¨è°ƒç”¨)
+uint8_t mem_perused(void);					             //è·å¾—å†…å­˜ä½¿ç”¨ç‡(å¤–/å†…éƒ¨è°ƒç”¨) 
+void mymemset(void *s,uint8_t c,uint32_t count); //è®¾ç½®å†…å­˜
+void mymemcpy(void *des,void *src,uint32_t n);   //å¤åˆ¶å†…å­˜     
 
-void myfree(void *ptr);  				            //ÄÚ´æÊÍ·Å(Íâ²¿µ÷ÓÃ)
-void *mymalloc(uint32_t size) ;				      //ÄÚ´æ·ÖÅä(Íâ²¿µ÷ÓÃ)
-void *myrealloc(void *ptr,uint32_t size) ;	//ÖØĞÂ·ÖÅäÄÚ´æ(Íâ²¿µ÷ÓÃ)
+void myfree(void *ptr);  				            //å†…å­˜é‡Šæ”¾(å¤–éƒ¨è°ƒç”¨)
+void *mymalloc(uint32_t size) ;				      //å†…å­˜åˆ†é…(å¤–éƒ¨è°ƒç”¨)
+void *myrealloc(void *ptr,uint32_t size) ;	//é‡æ–°åˆ†é…å†…å­˜(å¤–éƒ¨è°ƒç”¨)
 #endif
 
 
