@@ -15,6 +15,8 @@ GD32F303RCT6 embedded development project using CMake on Linux for cross-compila
 ## Build Commands
 
 ```bash
+
+
 # Configure for Debug build
 cmake -DCMAKE_BUILD_TYPE=Debug -B build
 
@@ -29,17 +31,18 @@ openocd -f gd32f303_flash.cfg -c "program build/GD32F303RC.bin verify reset 0x08
 ```
 
 VS Code tasks provide shortcuts:
+
 - `Ctrl+Shift+B` → Build Project (CMake)
 - `Build & Flash` → Build and flash in one step
 
 ## Build Types
 
-| Type | Flags | Description |
-|------|-------|-------------|
-| Debug | `-Og -g3 -DDEBUG` | Minimal optimization, full debug symbols |
-| Release | `-O3` | Maximum speed optimization |
-| RelWithDebInfo | `-O2 -g` | Optimized with debug info |
-| MinSizeRel | `-Os` | Size optimization |
+| Type           | Flags               | Description                              |
+| -------------- | ------------------- | ---------------------------------------- |
+| Debug          | `-Og -g3 -DDEBUG` | Minimal optimization, full debug symbols |
+| Release        | `-O3`             | Maximum speed optimization               |
+| RelWithDebInfo | `-O2 -g`          | Optimized with debug info                |
+| MinSizeRel     | `-Os`             | Size optimization                        |
 
 ## Project Structure
 
@@ -83,13 +86,13 @@ The start task is created first, scheduler started, then start task creates the 
 
 ## Key Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `CMakeLists.txt` | Build configuration, compiler flags, source file selection |
-| `GD32F303RC.ld` | Linker script (256K Flash @ 0x08000000, 48K RAM @ 0x20000000) |
-| `gd32f303_flash.cfg` | OpenOCD config (J-Link SWD, 4MHz adapter speed) |
-| `App/FreeRTOSConfig.h` | RTOS configuration |
-| `.vscode/launch.json` | Debug configuration (auto-build, flash, stop at main) |
+| File                     | Purpose                                                       |
+| ------------------------ | ------------------------------------------------------------- |
+| `CMakeLists.txt`       | Build configuration, compiler flags, source file selection    |
+| `GD32F303RC.ld`        | Linker script (256K Flash @ 0x08000000, 48K RAM @ 0x20000000) |
+| `gd32f303_flash.cfg`   | OpenOCD config (J-Link SWD, 4MHz adapter speed)               |
+| `App/FreeRTOSConfig.h` | RTOS configuration                                            |
+| `.vscode/launch.json`  | Debug configuration (auto-build, flash, stop at main)         |
 
 ## Debugging
 
@@ -101,6 +104,7 @@ The start task is created first, scheduler started, then start task creates the 
 ## CMake Build Details
 
 The build uses several exclusions to avoid duplicate compilation:
+
 - `lcd_ex.c` is excluded because it's `#include`'d from `lcd.c`
 - `portable/RVDS/*` excluded (Keil-specific, not GCC compatible)
 - `MemMang/heap_[^4].c` excluded (only heap_4.c is used)

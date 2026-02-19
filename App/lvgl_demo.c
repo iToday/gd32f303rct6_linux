@@ -11,7 +11,11 @@
 #include "lvgl.h"
 #include "lv_port_disp_template.h"
 #include "lv_port_indev_template.h"
+/* LVGL stress demo is optional and provides large assets/fonts.
+    Disable by default to save flash/RAM; define USE_LV_DEMO_STRESS to enable. */
+#ifdef USE_LV_DEMO_STRESS
 #include "lv_demo_stress.h"
+#endif
 
 
 /******************************************************************************************************/
@@ -71,13 +75,13 @@ void lvgl_demo(void)
 void start_task(void *pvParameters)
 {
     pvParameters = pvParameters;
-    
+
     taskENTER_CRITICAL();           /* �����ٽ��� */
 
     /* ����LVGL���� */
     xTaskCreate((TaskFunction_t )lv_demo_task,
                 (const char*    )"lv_demo_task",
-                (uint16_t       )LV_DEMO_STK_SIZE, 
+                (uint16_t       )LV_DEMO_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )LV_DEMO_TASK_PRIO,
                 (TaskHandle_t*  )&LV_DEMOTask_Handler);
@@ -102,9 +106,11 @@ void start_task(void *pvParameters)
 void lv_demo_task(void *pvParameters)
 {
     pvParameters = pvParameters;
-    
-    lv_demo_stress();       /* ���Ե�demo */
-    
+
+#ifdef USE_LV_DEMO_STRESS
+    lv_demo_stress();       /* run stress demo when enabled */
+#endif
+
     while(1)
     {
         lv_timer_handler(); /* LVGL��ʱ�� */
@@ -119,17 +125,15 @@ void lv_demo_task(void *pvParameters)
  */
 void led_task(void *pvParameters)
 {
-    
+
     /* 启动定时器2，用于产生定时中断 */
     TIM2_Int_Init(9999, 11999);  // 1秒定时: ((9999+1)*(11999+1))/120MHz = 1秒
 
     pvParameters = pvParameters;
-    
+
     while(1)
     {
         LED0_TOGGLE();
         vTaskDelay(1000);
     }
 }
-
-

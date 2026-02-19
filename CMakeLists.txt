@@ -70,7 +70,6 @@ include_directories(
     Middlewares/LVGL/GUI/lvgl/src
     Middlewares/LVGL/GUI/lvgl
     Middlewares/LVGL/GUI/lvgl/examples/porting
-    Middlewares/LVGL/GUI_APP/demos/stress
     Middlewares/MALLOC
 )
 
@@ -96,7 +95,9 @@ file(GLOB_RECURSE SOURCES
     "Middlewares/FreeRTOS/portable/MemMang/heap_4.c"
     "Middlewares/LVGL/GUI/lvgl/src/*.*"
     "Middlewares/LVGL/GUI/lvgl/*.*"
-    "Middlewares/LVGL/GUI_APP/demos/stress/*.*"
+    # Exclude LVGL stress demo (large fonts/assets) to save flash/RAM.
+    # If you need the demo, re-enable selectively.
+    # "Middlewares/LVGL/GUI_APP/demos/stress/*.*"
     "Middlewares/MALLOC/*.*"
 )
 
@@ -104,6 +105,17 @@ file(GLOB_RECURSE SOURCES
 list(FILTER SOURCES EXCLUDE REGEX ".*/portable/RVDS/.*")
 # FreeRTOS 只保留 heap_4，排除其他 heap 实现
 list(FILTER SOURCES EXCLUDE REGEX ".*/MemMang/heap_[^4].*")
+
+# Exclude LVGL demo assets to reduce flash/ram usage, but keep
+# the `src/extra` module because core code calls `lv_extra_init()`.
+list(FILTER SOURCES EXCLUDE REGEX ".*/Middlewares/LVGL/GUI_APP/demos/stress/.*")
+# NOTE: Do NOT exclude `.../lvgl/src/extra/` — `lv_obj.c` calls
+# `lv_extra_init()` so excluding it breaks the link. Keep fonts
+# exclusion if you want to remove montserrat fonts only.
+## If you want to reduce size by removing montserrat fonts, enable
+## the exclusion below and ensure `lv_conf.h` uses another available
+## default font; commented out by default to avoid undefined refs.
+# list(FILTER SOURCES EXCLUDE REGEX ".*/Middlewares/LVGL/GUI/lvgl/src/font/lv_font_montserrat_.*")
 
 # Exclude lcd_ex.c if present to avoid duplicate symbols when
 # lcd.c includes its implementation. Prefer building lcd_ex.c
