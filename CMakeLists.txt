@@ -18,7 +18,7 @@ project(GD32F303RC C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 
-add_compile_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
+add_compile_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 add_compile_options(-ffunction-sections -fdata-sections -fno-common -fmessage-length=0)
 add_compile_options(-g3)  # 添加调试符号
 
@@ -62,11 +62,15 @@ include_directories(
     Drivers/TIMER/
     Drivers/TOUCH/
     Drivers/24CXX/
-    Middleware/FreeRTOS/portable/RVDS/ARM_CM3
-    Middleware/FreeRTOS/portable/MenMang
-    Middleware/LVGL/GUI/lvgl/src
-    Middleware/LVGL/GUI/lvgl
-    Middleware/MALLOC
+    Middlewares/FreeRTOS/include
+    Middlewares/FreeRTOS/portable/GCC/ARM_CM4F
+    Middlewares/FreeRTOS/portable/MemMang
+    Middlewares/LVGL/GUI
+    Middlewares/LVGL/GUI/lvgl/src
+    Middlewares/LVGL/GUI/lvgl
+    Middlewares/LVGL/GUI/lvgl/examples/porting
+    Middlewares/LVGL/GUI_APP/demos/stress
+    Middlewares/MALLOC
 )
 
 add_definitions(-DDEBUG -DGD32F3 -DGD32F30x -DGD32F303 -DGD32F30X_HD -DUSE_STDPERIPH_DRIVER)
@@ -84,20 +88,26 @@ file(GLOB_RECURSE SOURCES
     "Drivers/TIMER/*.*"
     "Drivers/TOUCH/*.*"
     "Drivers/24CXX/*.*"
-    "Middleware/FreeRTOS/portable/RVDS/ARM_CM3/*.*"
-    "Middleware/FreeRTOS/portable/MenMang/*.*"
-    "Middleware/LVGL/GUI/lvgl/src/*.*"
-    "Middleware/LVGL/GUI/lvgl/*.*"
-    "Middleware/MALLOC/*.*"
+    "Middlewares/FreeRTOS/*.*"
+    "Middlewares/FreeRTOS/portable/GCC/ARM_CM4F/*.*"
+    "Middlewares/FreeRTOS/portable/MemMang/heap_4.c"
+    "Middlewares/LVGL/GUI/lvgl/src/*.*"
+    "Middlewares/LVGL/GUI/lvgl/*.*"
+    "Middlewares/LVGL/GUI_APP/demos/stress/*.*"
+    "Middlewares/MALLOC/*.*"
 )
 
 # lcd.c 中通过 #include "lcd_ex.c" 包含了 lcd_ex.c，排除单独编译避免重复定义
 list(FILTER SOURCES EXCLUDE REGEX ".*lcd_ex\\.c$")
+# RVDS port 是 Keil 专用，GCC 下不能编译
+list(FILTER SOURCES EXCLUDE REGEX ".*/portable/RVDS/.*")
+# FreeRTOS 只保留 heap_4，排除其他 heap 实现
+list(FILTER SOURCES EXCLUDE REGEX ".*/MemMang/heap_[^4].*")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/GD32F303RC.ld)
 
 add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
-add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
+add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 #add_link_options(-specs=nano.specs -lc -lgcc)
 #add_link_options(-lc -lgcc)
 add_link_options(-specs=nosys.specs)

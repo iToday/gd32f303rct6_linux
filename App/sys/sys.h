@@ -3,20 +3,23 @@
 
 #include "gd32f30x.h"
 
+/* å…¼å®¹ Keil ä»£ç ä¸­çš„ gpio_pin_setï¼Œæ˜ å°„åˆ° GD32 æ ‡å‡†åº“ gpio_bit_write */
+#define gpio_pin_set(port, pin, val)  gpio_bit_write((port), (pin), (val) ? SET : RESET)
+
 
 /**
- * SYS_SUPPORT_OSÓÃÓÚ¶¨ÒåÏµÍ³ÎÄ¼ş¼ĞÊÇ·ñÖ§³ÖOS
- * 0,²»Ö§³ÖOS
- * 1,Ö§³ÖOS
+ * SYS_SUPPORT_OSï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ÏµÍ³ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ö§ï¿½ï¿½OS
+ * 0,ï¿½ï¿½Ö§ï¿½ï¿½OS
+ * 1,Ö§ï¿½ï¿½OS
  */
 #define SYS_SUPPORT_OS          0
 
 
-/* ÒÔÏÂÎª»ã±àº¯Êı */
-void sys_wfi_set(void);                                                         /* Ö´ĞĞWFIÖ¸Áî */
-void sys_intx_disable(void);                                                    /* ¹Ø±ÕËùÓĞÖĞ¶Ï */
-void sys_intx_enable(void);                                                     /* ¿ªÆôËùÓĞÖĞ¶Ï */
-void sys_msr_msp(uint32_t addr);                                                /* ÉèÖÃÕ»¶¥µØÖ· */
+/* ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½àº¯ï¿½ï¿½ */
+void sys_wfi_set(void);                                                         /* Ö´ï¿½ï¿½WFIÖ¸ï¿½ï¿½ */
+void sys_intx_disable(void);                                                    /* ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ */
+void sys_intx_enable(void);                                                     /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ */
+void sys_msr_msp(uint32_t addr);                                                /* ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½Ö· */
 
 #endif
 
