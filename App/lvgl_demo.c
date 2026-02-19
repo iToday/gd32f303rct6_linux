@@ -1,9 +1,10 @@
 /************************************************
-* WKS Mini GD32©╙╥╒╟Е
+* WKS Mini GD32О©╫О©╫О©╫О©╫О©╫О©╫
 * LVGL
 ************************************************/
 #include "lvgl_demo.h"
 #include "led.h"
+#include "timer.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -14,66 +15,66 @@
 
 
 /******************************************************************************************************/
-/*FreeRTOSеДжц*/
+/*FreeRTOSО©╫О©╫О©╫О©╫*/
 
-/* START_TASK хннЯ еДжц
- * ╟Эю╗: хннЯ╬Д╠З хннЯсеох╪╤ ╤яу╩╢Сп║ ╢╢╫╗хннЯ
+/* START_TASK О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+ * О©╫О©╫О©╫О©╫: О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ О©╫О©╫у╩О©╫О©╫п║ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
  */
-#define START_TASK_PRIO     1           /* хннЯсеох╪╤ */
-#define START_STK_SIZE      128         /* хннЯ╤яу╩╢Сп║ */
-TaskHandle_t StartTask_Handler;         /* хннЯ╬Д╠З */
-void start_task(void *pvParameters);    /* хннЯ╨╞йЩ */
+#define START_TASK_PRIO     1           /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ */
+#define START_STK_SIZE      128         /* О©╫О©╫О©╫О©╫О©╫у╩О©╫О©╫п║ */
+TaskHandle_t StartTask_Handler;         /* О©╫О©╫О©╫О©╫О©╫О©╫ */
+void start_task(void *pvParameters);    /* О©╫О©╫О©╫О©╫О©╫О©╫ */
 
-/* LV_DEMO_TASK хннЯ еДжц
- * ╟Эю╗: хннЯ╬Д╠З хннЯсеох╪╤ ╤яу╩╢Сп║ ╢╢╫╗хннЯ
+/* LV_DEMO_TASK О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+ * О©╫О©╫О©╫О©╫: О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ О©╫О©╫у╩О©╫О©╫п║ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
  */
-#define LV_DEMO_TASK_PRIO   3           /* хннЯсеох╪╤ */
-#define LV_DEMO_STK_SIZE    1024        /* хннЯ╤яу╩╢Сп║ */
-TaskHandle_t LV_DEMOTask_Handler;       /* хннЯ╬Д╠З */
-void lv_demo_task(void *pvParameters);  /* хннЯ╨╞йЩ */
+#define LV_DEMO_TASK_PRIO   3           /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ */
+#define LV_DEMO_STK_SIZE    1024        /* О©╫О©╫О©╫О©╫О©╫у╩О©╫О©╫п║ */
+TaskHandle_t LV_DEMOTask_Handler;       /* О©╫О©╫О©╫О©╫О©╫О©╫ */
+void lv_demo_task(void *pvParameters);  /* О©╫О©╫О©╫О©╫О©╫О©╫ */
 
-/* LED_TASK хннЯ еДжц
- * ╟Эю╗: хннЯ╬Д╠З хннЯсеох╪╤ ╤яу╩╢Сп║ ╢╢╫╗хннЯ
+/* LED_TASK О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
+ * О©╫О©╫О©╫О©╫: О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ О©╫О©╫у╩О©╫О©╫п║ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
  */
-#define LED_TASK_PRIO       4           /* хннЯсеох╪╤ */
-#define LED_STK_SIZE        128         /* хннЯ╤яу╩╢Сп║ */
-TaskHandle_t LEDTask_Handler;           /* хннЯ╬Д╠З */
-void led_task(void *pvParameters);      /* хннЯ╨╞йЩ */
+#define LED_TASK_PRIO       4           /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ */
+#define LED_STK_SIZE        128         /* О©╫О©╫О©╫О©╫О©╫у╩О©╫О©╫п║ */
+TaskHandle_t LEDTask_Handler;           /* О©╫О©╫О©╫О©╫О©╫О©╫ */
+void led_task(void *pvParameters);      /* О©╫О©╫О©╫О©╫О©╫О©╫ */
 /******************************************************************************************************/
 
 /**
- * @brief       lvgl_demoхК©з╨╞йЩ
- * @param       нч
- * @retval      нч
+ * @brief       lvgl_demoО©╫О©╫з╨О©╫О©╫О©╫
+ * @param       О©╫О©╫
+ * @retval      О©╫О©╫
  */
 void lvgl_demo(void)
 {
-    lv_init();                                          /* lvglо╣мЁЁУй╪╩╞ */
-    lv_port_disp_init();                                /* lvglотй╬╫с©зЁУй╪╩╞,╥етзlv_init()╣д╨СцФ */
-    lv_port_indev_init();                               /* lvglйДхК╫с©зЁУй╪╩╞,╥етзlv_init()╣д╨СцФ */
+    lv_init();                                          /* lvglо╣мЁО©╫О©╫й╪О©╫О©╫ */
+    lv_port_disp_init();                                /* lvglО©╫О©╫й╬О©╫с©зЁО©╫й╪О©╫О©╫,О©╫О©╫О©╫О©╫lv_init()О©╫д╨О©╫О©╫О©╫ */
+    lv_port_indev_init();                               /* lvglО©╫О©╫О©╫О©╫с©зЁО©╫й╪О©╫О©╫,О©╫О©╫О©╫О©╫lv_init()О©╫д╨О©╫О©╫О©╫ */
 
-    xTaskCreate((TaskFunction_t )start_task,            /* хннЯ╨╞йЩ */
-                (const char*    )"start_task",          /* хннЯцШЁф */
-                (uint16_t       )START_STK_SIZE,        /* хннЯ╤яу╩╢Сп║ */
-                (void*          )NULL,                  /* ╢╚╣щ╦ЬхннЯ╨╞йЩ╣д╡нйЩ */
-                (UBaseType_t    )START_TASK_PRIO,       /* хннЯсеох╪╤ */
-                (TaskHandle_t*  )&StartTask_Handler);   /* хннЯ╬Д╠З */
+    xTaskCreate((TaskFunction_t )start_task,            /* О©╫О©╫О©╫О©╫О©╫О©╫ */
+                (const char*    )"start_task",          /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
+                (uint16_t       )START_STK_SIZE,        /* О©╫О©╫О©╫О©╫О©╫у╩О©╫О©╫п║ */
+                (void*          )NULL,                  /* О©╫О©╫О©╫щ╦О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫д╡О©╫О©╫О©╫ */
+                (UBaseType_t    )START_TASK_PRIO,       /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫х╪О©╫ */
+                (TaskHandle_t*  )&StartTask_Handler);   /* О©╫О©╫О©╫О©╫О©╫О©╫ */
 
-    vTaskStartScheduler();                              /* ©╙фТхннЯ╣В╤х */
+    vTaskStartScheduler();                              /* О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
 }
 
 /**
  * @brief       start_task
- * @param       pvParameters : ╢╚хК╡нйЩ(н╢сц╣╫)
- * @retval      нч
+ * @param       pvParameters : О©╫О©╫О©╫О©╫О©╫О©╫О©╫(н╢О©╫ц╣О©╫)
+ * @retval      О©╫О©╫
  */
 void start_task(void *pvParameters)
 {
     pvParameters = pvParameters;
     
-    taskENTER_CRITICAL();           /* ╫ЬхКаы╫ГгЬ */
+    taskENTER_CRITICAL();           /* О©╫О©╫О©╫О©╫О©╫ы╫О©╫О©╫О©╫ */
 
-    /* ╢╢╫╗LVGLхннЯ */
+    /* О©╫О©╫О©╫О©╫LVGLО©╫О©╫О©╫О©╫ */
     xTaskCreate((TaskFunction_t )lv_demo_task,
                 (const char*    )"lv_demo_task",
                 (uint16_t       )LV_DEMO_STK_SIZE, 
@@ -81,7 +82,7 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )LV_DEMO_TASK_PRIO,
                 (TaskHandle_t*  )&LV_DEMOTask_Handler);
 
-    /* LED╡БйтхннЯ */
+    /* LEDО©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ */
     xTaskCreate((TaskFunction_t )led_task,
                 (const char*    )"led_task",
                 (uint16_t       )LED_STK_SIZE,
@@ -89,35 +90,39 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )LED_TASK_PRIO,
                 (TaskHandle_t*  )&LEDTask_Handler);
 
-    taskEXIT_CRITICAL();            /* мкЁЖаы╫ГгЬ */
-    vTaskDelete(StartTask_Handler); /* и╬ЁЩ©╙й╪хннЯ */
+    taskEXIT_CRITICAL();            /* О©╫кЁО©╫О©╫ы╫О©╫О©╫О©╫ */
+    vTaskDelete(StartTask_Handler); /* и╬О©╫О©╫О©╫О©╫й╪О©╫О©╫О©╫О©╫ */
 }
 
 /**
- * @brief       LVGLткппюЩЁл
- * @param       pvParameters : ╢╚хК╡нйЩ(н╢сц╣╫)
- * @retval      нч
+ * @brief       LVGLО©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
+ * @param       pvParameters : О©╫О©╫О©╫О©╫О©╫О©╫О©╫(н╢О©╫ц╣О©╫)
+ * @retval      О©╫О©╫
  */
 void lv_demo_task(void *pvParameters)
 {
     pvParameters = pvParameters;
     
-    lv_demo_stress();       /* ╡Бйт╣дdemo */
+    lv_demo_stress();       /* О©╫О©╫О©╫т╣О©╫demo */
     
     while(1)
     {
-        lv_timer_handler(); /* LVGL╪фй╠фВ */
+        lv_timer_handler(); /* LVGLО©╫О©╫й╠О©╫О©╫ */
         vTaskDelay(5);
     }
 }
 
 /**
  * @brief       led_task
- * @param       pvParameters : ╢╚хК╡нйЩ(н╢сц╣╫)
- * @retval      нч
+ * @param       pvParameters : О©╫О©╫О©╫О©╫О©╫О©╫О©╫(н╢О©╫ц╣О©╫)
+ * @retval      О©╫О©╫
  */
 void led_task(void *pvParameters)
 {
+    
+    /* Е░╞Е┼╗Е╝ Ф≈╤Е≥╗2О╪▄Г■╗Д╨▌Д╨╖Г■÷Е╝ Ф≈╤Д╦╜Ф√╜ */
+    TIM2_Int_Init(9999, 11999);  // 1Г╖▓Е╝ Ф≈╤: ((9999+1)*(11999+1))/120MHz = 1Г╖▓
+
     pvParameters = pvParameters;
     
     while(1)

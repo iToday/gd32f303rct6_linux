@@ -9,6 +9,10 @@
 #include "sys.h"
 
 
+/* 定时器中断标志位 - 用于在中断和任务间传递信号 */
+extern volatile uint8_t timer2_interrupt_flag;
+
+
 void TIM2_Int_Init(uint16_t arr,uint16_t psc);  //ͨ�ö�ʱ��2�жϳ�ʼ��
 #endif
 

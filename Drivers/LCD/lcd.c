@@ -10,19 +10,8 @@
 #include "lcdfont.h"
 #include "usart.h"
 
-/* GPIO control helper functions */
-static inline void gpio_csx_set(uint8_t val) {
-    (val) ? gpio_bit_write(GPIOB, GPIO_PIN_12, SET) : gpio_bit_write(GPIOB, GPIO_PIN_12, RESET);
-}
-static inline void gpio_scl_set(uint8_t val) {
-    (val) ? gpio_bit_write(GPIOB, GPIO_PIN_13, SET) : gpio_bit_write(GPIOB, GPIO_PIN_13, RESET);
-}
-static inline void gpio_sda_set(uint8_t val) {
-    (val) ? gpio_bit_write(GPIOB, GPIO_PIN_15, SET) : gpio_bit_write(GPIOB, GPIO_PIN_15, RESET);
-}
-static inline uint8_t gpio_sda_get(void) {
-    return gpio_input_bit_get(GPIOB, GPIO_PIN_14);
-}
+/* GPIO helpers moved to Drivers/HAL/hal_gpio.{h,c} */
+#include "../HAL/hal_gpio.h"
 
 /* Override problematic macros from lcd.h */
 #undef SPI_CSX_SET
@@ -33,17 +22,24 @@ static inline uint8_t gpio_sda_get(void) {
 #undef SPI_SDA_CLR
 #undef SPI_READ_SDA
 
-#define SPI_CSX  gpio_csx_set(1)      /* CSX = 1 */
-#define SPI_SCL  gpio_scl_set(1)      /* SCL = 1 */
-#define SPI_SDA  gpio_sda_set(1)      /* SDA = 1 */
-#define SPI_READ_SDA  gpio_sda_get()  /* Read SDA */
+/* Provide SET/CLR macros kept for backwards compatibility. Prefer using
+    gpio_csx_set/gpio_scl_set/gpio_sda_set directly in new code. */
+#define SPI_CSX_SET()    gpio_csx_set(1)
+#define SPI_CSX_CLR()    gpio_csx_set(0)
+#define SPI_SCL_SET()    gpio_scl_set(1)
+#define SPI_SCL_CLR()    gpio_scl_set(0)
+#define SPI_SDA_SET()    gpio_sda_set(1)
+#define SPI_SDA_CLR()    gpio_sda_set(0)
+#define SPI_READ_SDA()   gpio_sda_get()
+#undef SPI_READ_SDA
+#define SPI_READ_SDA     gpio_sda_get()
 
 
-/* lcd_ex.c��Ÿ���LCD����IC�ļĴ�����ʼ�����ִ���,�Լ�lcd.c,��.c�ļ�
- * ��ֱ�Ӽ��뵽��������,ֻ��lcd.c���õ�,����ͨ��include����ʽ����.(��Ҫ��
- * �����ļ��ٰ�����.c�ļ�!!����ᱨ��!)
+/* lcd_ex.h 存放各LCD控制IC的寄存器初始化和读写程序,以及lcd.c等.c文件
+ * 不直接加到工程中,只供lcd.c使用,所以通过include方式加入.(不要在
+ * 其他文件再包含此文件!!否则会报错!)
  */
-#include "lcd_ex.c"
+#include "lcd_ex.h"
 
 
 /* LCD�Ļ�����ɫ�ͱ���ɫ */

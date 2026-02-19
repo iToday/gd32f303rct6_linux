@@ -1,51 +1,56 @@
-/************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* ¶¨Ê±Æ÷ÖĞ¶Ï Çı¶¯´úÂë	   
-* °æ±¾£ºV1.0								  
-************************************************/	
+/************************************************
+* WKS Mini GD32ï¿½ï¿½ï¿½Ä°ï¿½
+* ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ğ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+* ï¿½æ±¾ï¿½ï¿½V1.0
+************************************************/
 
 #include "timer.h"
 #include "led.h"
 //#include "../../lvgl.h"
 
-//Í¨ÓÃ¶¨Ê±Æ÷2ÖĞ¶Ï³õÊ¼»¯
-//arr£º×Ô¶¯ÖØ×°Öµ¡£
-//psc£ºÊ±ÖÓÔ¤·ÖÆµÊı
-//¶¨Ê±Æ÷Òç³öÊ±¼ä¼ÆËã·½·¨:Tout=((arr+1)*(psc+1))/Ft us.
-//Ft=¶¨Ê±Æ÷¹¤×÷ÆµÂÊ,µ¥Î»:Mhz
-//APB1Ê±ÖÓÎª60MHz£¬TIMER2Ê±ÖÓÑ¡ÔñÎªAPB1µÄ2±¶£¬Òò´Ë£¬TIMER2Ê±ÖÓÎª120MHz
+/* å®šæ—¶å™¨ä¸­æ–­æ ‡å¿—ä½ - ç”¨äºåœ¨ä¸­æ–­å’Œä»»åŠ¡é—´ä¼ é€’ä¿¡å· */
+volatile uint8_t timer2_interrupt_flag = 0;
+
+//Í¨ï¿½Ã¶ï¿½Ê±ï¿½ï¿½2ï¿½Ğ¶Ï³ï¿½Ê¼ï¿½ï¿½
+//arrï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½×°Öµï¿½ï¿½
+//pscï¿½ï¿½Ê±ï¿½ï¿½Ô¤ï¿½ï¿½Æµï¿½ï¿½
+//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ã·½ï¿½ï¿½:Tout=((arr+1)*(psc+1))/Ft us.
+//Ft=ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½,ï¿½ï¿½Î»:Mhz
+//APB1Ê±ï¿½ï¿½Îª60MHzï¿½ï¿½TIMER2Ê±ï¿½ï¿½Ñ¡ï¿½ï¿½ÎªAPB1ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½TIMER2Ê±ï¿½ï¿½Îª120MHz
 void TIM2_Int_Init(uint16_t arr,uint16_t psc)
 {
-	timer_parameter_struct timer_initpara;               //timer_initparaÓÃÓÚ´æ·Å¶¨Ê±Æ÷µÄ²ÎÊı
+	timer_parameter_struct timer_initpara;               //timer_initparaï¿½ï¿½ï¿½Ú´ï¿½Å¶ï¿½Ê±ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 
-  //Ê¹ÄÜRCUÏà¹ØÊ±ÖÓ 
-  rcu_periph_clock_enable(RCU_TIMER2);                 //Ê¹ÄÜTIMER2µÄÊ±ÖÓ
+  //Ê¹ï¿½ï¿½RCUï¿½ï¿½ï¿½Ê±ï¿½ï¿½ 
+  rcu_periph_clock_enable(RCU_TIMER2);                 //Ê¹ï¿½ï¿½TIMER2ï¿½ï¿½Ê±ï¿½ï¿½
 
-  //¸´Î»TIMER2
-  timer_deinit(TIMER2);                                //¸´Î»TIMER2
-  timer_struct_para_init(&timer_initpara);             //³õÊ¼»¯timer_initparaÎªÄ¬ÈÏÖµ
+  //ï¿½ï¿½Î»TIMER2
+  timer_deinit(TIMER2);                                //ï¿½ï¿½Î»TIMER2
+  timer_struct_para_init(&timer_initpara);             //ï¿½ï¿½Ê¼ï¿½ï¿½timer_initparaÎªÄ¬ï¿½ï¿½Öµ
 
-  //ÅäÖÃTIMER2
-  timer_initpara.prescaler         = psc;              //ÉèÖÃÔ¤·ÖÆµÖµ
-  timer_initpara.counterdirection  = TIMER_COUNTER_UP; //ÉèÖÃÏòÉÏ¼ÆÊıÄ£Ê½
-  timer_initpara.period            = arr;              //ÉèÖÃ×Ô¶¯ÖØ×°ÔØÖµ
-  timer_initpara.clockdivision     = TIMER_CKDIV_DIV1; //ÉèÖÃÊ±ÖÓ·ÖÆµÒò×Ó
-  timer_init(TIMER2, &timer_initpara);                 //¸ù¾İ²ÎÊı³õÊ¼»¯¶¨Ê±Æ÷
+  //ï¿½ï¿½ï¿½ï¿½TIMER2
+  timer_initpara.prescaler         = psc;              //ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ÆµÖµ
+  timer_initpara.counterdirection  = TIMER_COUNTER_UP; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½Ä£Ê½
+  timer_initpara.period            = arr;              //ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½×°ï¿½ï¿½Öµ
+  timer_initpara.clockdivision     = TIMER_CKDIV_DIV1; //ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ó·ï¿½Æµï¿½ï¿½ï¿½ï¿½
+  timer_init(TIMER2, &timer_initpara);                 //ï¿½ï¿½ï¿½İ²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 
-  //Ê¹ÄÜ¶¨Ê±Æ÷¼°ÆäÖĞ¶Ï
-  timer_interrupt_enable(TIMER2, TIMER_INT_UP);        //Ê¹ÄÜ¶¨Ê±Æ÷µÄ¸üĞÂÖĞ¶Ï
-  nvic_irq_enable(TIMER2_IRQn, 1, 3);                  //ÅäÖÃNVICÉèÖÃÓÅÏÈ¼¶£¬ÇÀÕ¼ÓÅÏÈ¼¶1£¬ÏìÓ¦ÓÅÏÈ¼¶3
-  timer_enable(TIMER2);                                //Ê¹ÄÜ¶¨Ê±Æ÷TIMER2
+  //Ê¹ï¿½Ü¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
+  timer_interrupt_enable(TIMER2, TIMER_INT_UP);        //Ê¹ï¿½Ü¶ï¿½Ê±ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
+  nvic_irq_enable(TIMER2_IRQn, 1, 3);                  //ï¿½ï¿½ï¿½ï¿½NVICï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½1ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½È¼ï¿½3
+  timer_enable(TIMER2);                                //Ê¹ï¿½Ü¶ï¿½Ê±ï¿½ï¿½TIMER2
 }
 
-//¶¨Ê±Æ÷2ÖĞ¶Ï·şÎñ³ÌĞò
+//ï¿½ï¿½Ê±ï¿½ï¿½2ï¿½Ğ¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void TIMER2_IRQHandler(void)
 {
-  if(timer_interrupt_flag_get(TIMER2, TIMER_INT_FLAG_UP) == SET)   //ÅĞ¶Ï¶¨Ê±Æ÷¸üĞÂÖĞ¶ÏÊÇ·ñ·¢Éú
+  if(timer_interrupt_flag_get(TIMER2, TIMER_INT_FLAG_UP) == SET)   //ï¿½Ğ¶Ï¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
   {
-		LED1_TOGGLE();   //LED1·­×ª
+		/* è®¾ç½®ä¸­æ–­æ ‡å¿—ä½ï¼Œåœ¨ä»»åŠ¡ä¸­å¤„ç† LED æ“ä½œ */
+		timer2_interrupt_flag = 1;
+		//LED1_TOGGLE();   //LED1ï¿½ï¿½×ª
     //lv_tick_inc(1);     		
-    timer_interrupt_flag_clear(TIMER2, TIMER_INT_FLAG_UP);         //Çå³ı¶¨Ê±Æ÷¸üĞÂÖĞ¶Ï±êÖ¾
+    timer_interrupt_flag_clear(TIMER2, TIMER_INT_FLAG_UP);         //ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶Ï±ï¿½Ö¾
   }
 }
 

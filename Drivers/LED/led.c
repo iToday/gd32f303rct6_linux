@@ -1,30 +1,21 @@
-/************************************************ 
-* WKS Mini GD32¿ª·¢°å
-* LEDÇı¶¯´úÂë	   
-* °æ±¾£ºV1.0								  
-************************************************/	
+/*
+ * LED driver moved to Drivers/LED for proper driver layering.
+ */
 
 #include "led.h"
 
 
-//LED IO³õÊ¼»¯
+// LED IO åˆå§‹åŒ–
 void LED_Init(void)
 {
-    rcu_periph_clock_enable(RCU_GPIOA);  //GPIOAÊ±ÖÓÊ¹ÄÜ
-		rcu_periph_clock_enable(RCU_GPIOD);  //GPIODÊ±ÖÓÊ¹ÄÜ
-	
-		gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8); //ÉèÖÃPA8ÍÆÍìÊä³ö
-		gpio_init(GPIOD, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2); //ÉèÖÃPD2ÍÆÍìÊä³ö
-	  
-	  LED0(1);                             //¹Ø±ÕLED0
-	  LED1(1);                             //¹Ø±ÕLED1
-}
-//·­×ªIO¿Ú×´Ì¬
-void gpio_togglepin(uint32_t gpio_periph, uint32_t pin)
-{
-  uint32_t octl;
+    rcu_periph_clock_enable(RCU_GPIOA);  //GPIOA æ—¶é’Ÿä½¿èƒ½
+    rcu_periph_clock_enable(RCU_GPIOD);  //GPIOD æ—¶é’Ÿä½¿èƒ½
 
-  octl = GPIO_OCTL(gpio_periph);
+    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8); // é…ç½®PA8ä¸ºæ¨æŒ½è¾“å‡º
+    gpio_init(GPIOD, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2); // é…ç½®PD2ä¸ºæ¨æŒ½è¾“å‡º
 
-  GPIO_BOP(gpio_periph) = ((octl & pin) << 16u) | (~octl & pin);
+    hal_led_set(0, 1);  // å…³ LED0 (ç¡¬ä»¶ä¸ºä½æœ‰æ•ˆæ—¶è¯·è°ƒæ•´)
+    hal_led_set(1, 1);  // å…³ LED1
 }
+
+// gpio_togglepin moved to HAL (Drivers/HAL/hal_gpio.c)

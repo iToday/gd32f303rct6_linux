@@ -58,10 +58,11 @@ include_directories(
     Drivers/LCD/
     Drivers/IIC/
     Drivers/KEY/
-    Drivers/LED/
     Drivers/TIMER/
     Drivers/TOUCH/
     Drivers/24CXX/
+    Drivers/HAL/
+    Drivers/LED/
     Middlewares/FreeRTOS/include
     Middlewares/FreeRTOS/portable/GCC/ARM_CM4F
     Middlewares/FreeRTOS/portable/MemMang
@@ -82,12 +83,14 @@ file(GLOB_RECURSE SOURCES
     "FWLIB/*.*"
     "Startup/*.*"
     "Drivers/LCD/*.*"
+    "Drivers/LED/*.*"
     "Drivers/IIC/*.*"
     "Drivers/KEY/*.*"
     #"Drivers/LED/*.*"  # 与 App/led.c 重复，已排除
     "Drivers/TIMER/*.*"
     "Drivers/TOUCH/*.*"
     "Drivers/24CXX/*.*"
+    "Drivers/HAL/*.*"
     "Middlewares/FreeRTOS/*.*"
     "Middlewares/FreeRTOS/portable/GCC/ARM_CM4F/*.*"
     "Middlewares/FreeRTOS/portable/MemMang/heap_4.c"
@@ -97,12 +100,15 @@ file(GLOB_RECURSE SOURCES
     "Middlewares/MALLOC/*.*"
 )
 
-# lcd.c 中通过 #include "lcd_ex.c" 包含了 lcd_ex.c，排除单独编译避免重复定义
-list(FILTER SOURCES EXCLUDE REGEX ".*lcd_ex\\.c$")
 # RVDS port 是 Keil 专用，GCC 下不能编译
 list(FILTER SOURCES EXCLUDE REGEX ".*/portable/RVDS/.*")
 # FreeRTOS 只保留 heap_4，排除其他 heap 实现
 list(FILTER SOURCES EXCLUDE REGEX ".*/MemMang/heap_[^4].*")
+
+# Exclude lcd_ex.c if present to avoid duplicate symbols when
+# lcd.c includes its implementation. Prefer building lcd_ex.c
+# only once or keeping it as header-only via lcd_ex.h.
+list(FILTER SOURCES EXCLUDE REGEX ".*/Drivers/LCD/lcd_ex.c")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/GD32F303RC.ld)
 

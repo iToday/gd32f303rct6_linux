@@ -1,28 +1,22 @@
-/************************************************ 
-* WKS Mini GD32开发板
-* LED驱动代码	   
-* 版本：V1.0								  
-************************************************/	
+/*
+ * LED driver header moved to Drivers/LED for clearer project layout.
+ */
 
 #ifndef _LED_H
 #define _LED_H
 #include "sys.h"
 
-/* LED端口定义 */
-#define LED0(x)   do{ x ? \
-                      gpio_bit_write(GPIOA, GPIO_PIN_8, SET) : \
-                      gpio_bit_write(GPIOA, GPIO_PIN_8, RESET); \
-                  }while(0)      
+/* Toggle macros */
+#include "../HAL/hal_gpio.h"
+#include "../HAL/hal_led.h"
 
-#define LED1(x)   do{ x ? \
-                      gpio_bit_write(GPIOD, GPIO_PIN_2, SET) : \
-                      gpio_bit_write(GPIOD, GPIO_PIN_2, RESET); \
-                  }while(0)     
+static inline void LED0(uint8_t x) { hal_led_set(0, x); }
+static inline void LED1(uint8_t x) { hal_led_set(1, x); }
 
-/* LED取反定义 */
-#define LED0_TOGGLE()   do{ gpio_togglepin(GPIOA, GPIO_PIN_8); }while(0)        /* 翻转LED0 */
-#define LED1_TOGGLE()   do{ gpio_togglepin(GPIOD, GPIO_PIN_2); }while(0)        /* 翻转LED1 */
+static inline void LED0_TOGGLE(void) { hal_led_toggle(0); }
+static inline void LED1_TOGGLE(void) { hal_led_toggle(1); }
 
-void LED_Init(void);                                      //初始化LED
-void gpio_togglepin(uint32_t gpio_periph, uint32_t pin);  //翻转IO口状态
+/* LED access now via HAL wrappers */
+void LED_Init(void);
+
 #endif
