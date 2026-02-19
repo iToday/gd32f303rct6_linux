@@ -1,7 +1,7 @@
 /* memory map */
 MEMORY
 {
-  FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 512K
+  FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 256K
   RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
@@ -10,7 +10,7 @@ ENTRY(Reset_Handler)
 SECTIONS
 {
   __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
-  
+
 /* ISR vectors */
   .vectors :
   {
@@ -26,7 +26,7 @@ SECTIONS
     . = ALIGN(4);
     *(.text)
     *(.text*)
-    *(.glue_7) 
+    *(.glue_7)
     *(.glue_7t)
     *(.eh_frame)
 
@@ -47,10 +47,10 @@ SECTIONS
   } >FLASH
 
    .ARM.extab :
-  { 
-     *(.ARM.extab* .gnu.linkonce.armextab.*) 
+  {
+     *(.ARM.extab* .gnu.linkonce.armextab.*)
   } >FLASH
-  
+
     .ARM : {
     __exidx_start = .;
     *(.ARM.exidx*)
@@ -65,7 +65,7 @@ SECTIONS
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
   } >FLASH
-  
+
   .init_array :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -73,7 +73,7 @@ SECTIONS
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
   } >FLASH
-  
+
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -117,9 +117,9 @@ SECTIONS
 
   .stack ORIGIN(RAM) + LENGTH(RAM) - __stack_size :
   {
-    PROVIDE( _heap_end = . ); 
-    . = __stack_size;  
-    PROVIDE( _sp = . ); 
+    PROVIDE( _heap_end = . );
+    . = __stack_size;
+    PROVIDE( _sp = . );
   } >RAM AT>RAM
 }
 
